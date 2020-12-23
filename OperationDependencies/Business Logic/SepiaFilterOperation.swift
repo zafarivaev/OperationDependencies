@@ -23,10 +23,10 @@ public class SepiaFilterOperation: Operation {
         super.init()
     }
     
-    /// A property for cases the SepiaFilterOperation doesn't have a dependency and we want to use it directly
+    /// A property for cases when the SepiaFilterOperation doesn't have a dependency and we want to use it directly
     public var inputImage: UIImage?
     
-    public let completionHandler: ((UIImage?) -> Void)
+    public let completionHandler: (UIImage?) -> Void
     
     public override func main() {
         // Search for a dependency that provides a UIImage

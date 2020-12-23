@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Base class for all asynchronous operations
 open class AsynchronousOperation: Operation {
     
     enum State: String {
