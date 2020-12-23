@@ -8,26 +8,38 @@
 
 import UIKit
 
+public protocol ImageProvider: class {
+    var image: UIImage? { get }
+}
+
 public class SepiaFilterOperation: Operation {
     
-    public init(completionHandler: @escaping (UIImage?) -> Void) {
+    public init(completionHandler: @escaping (UIImage?) -> Void,
+                inputImage: UIImage? = nil) {
         
         self.completionHandler = completionHandler
+        self.inputImage = inputImage
         
         super.init()
     }
     
+    /// A property for cases the SepiaFilterOperation doesn't have a dependency and we want to use it directly
+    public var inputImage: UIImage?
+    
     public let completionHandler: ((UIImage?) -> Void)
     
     public override func main() {
-        guard let initialImage = dependencies
-            .compactMap ({ ($0 as? ImageLoadingOperation)?.image })
-            .first else { return }
+        // Search for a dependency that provides a UIImage
+        let dependencyImage = dependencies
+            .compactMap ({ ($0 as? ImageProvider)?.image })
+            .first
         
-        guard let initialCIImage = CIImage(image: initialImage) else {
+        // Obtain a UIImage either directly or from a dependency
+        guard let inputImage = self.inputImage ?? dependencyImage else { return }
+        
+        guard let initialCIImage = CIImage(image: inputImage) else {
             return
         }
-        
         
         guard let sepiaCIImage = sepiaFilterCIImage(initialCIImage, intensity: 0.9) else { return }
         

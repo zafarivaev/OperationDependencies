@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class ImageLoadingOperation: AsynchronousOperation {
+public class ImageLoadingOperation: AsynchronousOperation, ImageProvider {
     
     // MARK: - Initialization
     public init(url: URL) {
